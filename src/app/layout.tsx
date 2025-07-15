@@ -3,14 +3,14 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/contexts/auth-context"
-import { Toaster } from "@/components/ui/toaster"
 import { AuthWrapper } from "@/components/layout/auth-wrapper"
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "FitTracker - Your Personal Fitness Companion",
-  description: "Track your workouts, set goals, and achieve your fitness dreams",
+  title: "FitTracker - Your Personal Fitness Journey",
+  description: "Track workouts, set goals, and monitor your fitness progress with FitTracker.",
 }
 
 export default function RootLayout({
@@ -22,8 +22,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <AuthProvider>
-          <AuthWrapper>{children}</AuthWrapper>
-          <Toaster />
+          <AuthWrapper>
+            {children}
+            <Toaster />
+          </AuthWrapper>
         </AuthProvider>
       </body>
     </html>
