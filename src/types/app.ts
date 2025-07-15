@@ -1,3 +1,5 @@
+import type { Workout, Goal, Profile } from "./database"
+
 export interface DashboardStats {
   totalWorkoutsThisWeek: number
   totalMinutesExercised: number
@@ -69,6 +71,8 @@ export interface PasswordFormData {
 }
 
 export type ViewMode = "month" | "week" | "agenda"
+
+export type { Workout, Goal, Profile }
 
 export const WORKOUT_TYPES = [
   "cardio",
