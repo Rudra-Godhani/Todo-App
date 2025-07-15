@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -123,4 +124,15 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="mt-\
+            <div className="mt-6 text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <Link href="/auth/signup" className="font-medium text-primary hover:underline">
+                Sign Up
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
