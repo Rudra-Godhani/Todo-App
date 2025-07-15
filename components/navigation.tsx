@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -13,7 +13,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Menu, Home, Dumbbell, Plus, History, Target, Calendar, User, Info, LogOut, Activity } from "lucide-react"
+import {
+  Menu,
+  Home,
+  Dumbbell,
+  Plus,
+  History,
+  Target,
+  Calendar,
+  User,
+  Info,
+  LogOut,
+  Activity,
+  Loader2,
+} from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 
@@ -29,12 +42,14 @@ const navigation = [
 ]
 
 export function Navigation() {
-  const { user, profile, signOut } = useAuth()
+  const { user, profile, signOut, signOutLoading } = useAuth()
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter()
 
   const handleSignOut = async () => {
     await signOut()
+    router.push("/auth/login")
   }
 
   if (!user) return null
@@ -128,9 +143,13 @@ export function Navigation() {
                 <DropdownMenuItem asChild>
                   <Link href="/profile">Profile</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                <DropdownMenuItem onClick={handleSignOut} disabled={signOutLoading}>
+                  {signOutLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <LogOut className="mr-2 h-4 w-4" />
+                  )}
+                  <span>{signOutLoading ? "Signing out..." : "Log out"}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

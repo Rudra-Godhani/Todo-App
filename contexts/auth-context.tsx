@@ -10,6 +10,7 @@ interface AuthContextType {
   profile: UserProfile | null
   loading: boolean
   signOut: () => Promise<void>
+  signOutLoading: boolean
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -17,12 +18,14 @@ const AuthContext = createContext<AuthContextType>({
   profile: null,
   loading: true,
   signOut: async () => {},
+  signOutLoading: false,
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [signOutLoading, setSignOutLoading] = useState(false)
 
   useEffect(() => {
     // Get initial session
@@ -68,10 +71,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    setSignOutLoading(true)
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error("Error signing out:", error)
+      }
+    } catch (error) {
+      console.error("Error signing out:", error)
+    } finally {
+      setSignOutLoading(false)
+    }
   }
 
-  return <AuthContext.Provider value={{ user, profile, loading, signOut }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, profile, loading, signOut, signOutLoading }}>{children}</AuthContext.Provider>
+  )
 }
 
 export const useAuth = () => {
